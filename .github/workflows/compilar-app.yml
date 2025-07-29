@@ -1,0 +1,32 @@
+name: Compilar mi app de brillo
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  compilar:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Descargar mi código
+      uses: actions/checkout@v4
+      
+    - name: Instalar Java
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        
+    - name: Hacer ejecutable el compilador
+      run: chmod +x gradlew
+      
+    - name: Compilar la app
+      run: ./gradlew assembleDebug
+      
+    - name: Guardar el APK
+      uses: actions/upload-artifact@v3
+      with:
+        name: mi-app-brillo-apk
+        path: app/build/outputs/apk/debug/app-debug.apk
